@@ -1,13 +1,14 @@
 package com.example.deliverable3_php_usercrud;
+
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
-
 
 import org.json.*;
 
@@ -16,19 +17,56 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    private EditText idField, nameField, emailField, passwordField;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    // Demo: Create a user
+        idField = findViewById(R.id.editTextId);
+        nameField = findViewById(R.id.editTextName);
+        emailField = findViewById(R.id.editTextEmail);
+        passwordField = findViewById(R.id.editTextPassword);
+
+        findViewById(R.id.btnCreate).setOnClickListener(v -> {
+            String name = nameField.getText().toString();
+            String email = emailField.getText().toString();
+            String password = passwordField.getText().toString();
+            createUser(name, email, password);
+        });
+
+        findViewById(R.id.btnRead).setOnClickListener(v -> fetchUsers());
+
+        findViewById(R.id.btnUpdate).setOnClickListener(v -> {
+            String idText = idField.getText().toString();
+            if (idText.isEmpty()) {
+                Toast.makeText(this, "Please enter an ID", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            int id = Integer.parseInt(idText);
+            String name = nameField.getText().toString();
+            String email = emailField.getText().toString();
+            String password = passwordField.getText().toString();
+            updateUser(id, name, email, password);
+        });
+
+        findViewById(R.id.btnDelete).setOnClickListener(v -> {
+            String idText = idField.getText().toString();
+            if (idText.isEmpty()) {
+                Toast.makeText(this, "Please enter an ID", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            int id = Integer.parseInt(idText);
+            deleteUser(id);
+        });
+    }
+
     private void createUser(String name, String email, String password) {
         StringRequest request = new StringRequest(Request.Method.POST, endpoints.CREATE,
                 response -> {
                     Toast.makeText(this, "User Created: " + response, Toast.LENGTH_LONG).show();
-
-                    // Clear the input fields
-                    ((EditText) findViewById(R.id.editTextId)).setText("");
-                    ((EditText) findViewById(R.id.editTextName)).setText("");
-                    ((EditText) findViewById(R.id.editTextEmail)).setText("");
-                    ((EditText) findViewById(R.id.editTextPassword)).setText("");
+                    clearInputFields();
                 },
                 error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Override
@@ -41,10 +79,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         VolleySingleton.getInstance(this).addToRequestQueue(request);
-
     }
 
-    // Demo: Fetch all users
     private void fetchUsers() {
         StringRequest request = new StringRequest(Request.Method.GET, endpoints.READ_ALL,
                 response -> {
@@ -54,9 +90,11 @@ public class MainActivity extends AppCompatActivity {
 
                         for (int i = 0; i < users.length(); i++) {
                             JSONObject obj = users.getJSONObject(i);
+                            int id = obj.getInt("id");
                             String name = obj.getString("name");
                             String email = obj.getString("email");
-                            builder.append("Name: ").append(name).append("\nEmail: ").append(email).append("\n\n");
+                            builder.append("id:").append(id).append("\nName: ").append(name)
+                                    .append("\nEmail: ").append(email).append("\n\n");
                         }
 
                         new AlertDialog.Builder(this)
@@ -76,49 +114,11 @@ public class MainActivity extends AppCompatActivity {
         VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        EditText idField = findViewById(R.id.editTextId);
-        EditText nameField = findViewById(R.id.editTextName);
-        EditText emailField = findViewById(R.id.editTextEmail);
-        EditText passwordField = findViewById(R.id.editTextPassword);
-
-        findViewById(R.id.btnCreate).setOnClickListener(v -> {
-            String name = nameField.getText().toString();
-            String email = emailField.getText().toString();
-            String password = passwordField.getText().toString();
-            createUser(name, email, password);
-        });
-
-        findViewById(R.id.btnRead).setOnClickListener(v -> fetchUsers());
-
-        findViewById(R.id.btnUpdate).setOnClickListener(v -> {
-            int id = Integer.parseInt(idField.getText().toString());
-            String name = nameField.getText().toString();
-            String email = emailField.getText().toString();
-            String password = passwordField.getText().toString();
-            updateUser(id, name, email, password);
-        });
-
-        findViewById(R.id.btnDelete).setOnClickListener(v -> {
-            int id = Integer.parseInt(idField.getText().toString());
-            deleteUser(id);
-        });
-
-    }
     private void updateUser(int id, String name, String email, String password) {
         StringRequest request = new StringRequest(Request.Method.POST, endpoints.UPDATE,
                 response -> {
                     Toast.makeText(this, "User Updated: " + response, Toast.LENGTH_LONG).show();
-
-                    // Clear the input fields
-                    ((EditText) findViewById(R.id.editTextId)).setText("");
-                    ((EditText) findViewById(R.id.editTextName)).setText("");
-                    ((EditText) findViewById(R.id.editTextEmail)).setText("");
-                    ((EditText) findViewById(R.id.editTextPassword)).setText("");
+                    clearInputFields();
                 },
                 error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Override
@@ -133,16 +133,12 @@ public class MainActivity extends AppCompatActivity {
         };
         VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
+
     private void deleteUser(int id) {
         StringRequest request = new StringRequest(Request.Method.POST, endpoints.DELETE,
                 response -> {
                     Toast.makeText(this, "User deleted: " + response, Toast.LENGTH_LONG).show();
-
-                    // Clear the input fields
-                    ((EditText) findViewById(R.id.editTextId)).setText("");
-                    ((EditText) findViewById(R.id.editTextName)).setText("");
-                    ((EditText) findViewById(R.id.editTextEmail)).setText("");
-                    ((EditText) findViewById(R.id.editTextPassword)).setText("");
+                    clearInputFields();
                 },
                 error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Override
@@ -155,4 +151,10 @@ public class MainActivity extends AppCompatActivity {
         VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 
+    private void clearInputFields() {
+        idField.setText("");
+        nameField.setText("");
+        emailField.setText("");
+        passwordField.setText("");
+    }
 }
