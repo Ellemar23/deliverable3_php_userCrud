@@ -8,6 +8,7 @@ public class VolleySingleton {
     private static VolleySingleton instance;
     private RequestQueue requestQueue;
 
+    
     private VolleySingleton(Context context) {
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());
     }
