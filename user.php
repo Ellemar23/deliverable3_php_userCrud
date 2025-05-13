@@ -4,6 +4,7 @@ $user = 'root';
 $password = '';
 $dbname = 'users';
 
+
 $conn = new mysqli($host, $user, $password, $dbname);
 
 // Check connection
