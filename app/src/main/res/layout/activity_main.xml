@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- ID field -->
+        <EditText
+            android:id="@+id/editTextId"
+            android:hint="User ID"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Name field -->
+        <EditText
+            android:id="@+id/editTextName"
+            android:hint="Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Email field -->
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Password field -->
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Buttons in GridLayout -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:layout_marginTop="16dp"
+            android:alignmentMode="alignMargins"
+            android:columnOrderPreserved="false">
+
+            <Button
+                android:id="@+id/btnCreate"
+                android:text="Create User"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_margin="8dp" />
+
+            <Button
+                android:id="@+id/btnRead"
+                android:text="Fetch All Users"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_margin="8dp" />
+
+            <Button
+                android:id="@+id/btnUpdate"
+                android:text="Update User"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_margin="8dp" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:text="Delete User"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_margin="8dp" />
+        </GridLayout>
+
+    </LinearLayout>
+</ScrollView>
